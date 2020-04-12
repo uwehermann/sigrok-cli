@@ -20,7 +20,8 @@
 #ifndef SIGROK_CLI_SIGROK_CLI_H
 #define SIGROK_CLI_SIGROK_CLI_H
 
-#ifdef HAVE_SRD
+#include <config.h>
+#ifdef LIBSIGROKDECODE_FOUND
 /* First, so we avoid a _POSIX_C_SOURCE warning. */
 #include <libsigrokdecode/libsigrokdecode.h>
 #endif
@@ -86,7 +87,7 @@ void load_input_file(gboolean do_props);
 int setup_binary_stdout(void);
 
 /* decode.c */
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 int register_pds(gchar **all_pds, char *opt_pd_annotations);
 int setup_pd_annotations(char *opt_pd_annotations);
 int setup_pd_meta(char *opt_pd_meta);
@@ -127,7 +128,7 @@ extern gchar *opt_channels;
 extern gchar *opt_channel_group;
 extern gchar *opt_triggers;
 extern gchar **opt_pds;
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 extern gchar *opt_pd_annotations;
 extern gchar *opt_pd_meta;
 extern gchar *opt_pd_binary;

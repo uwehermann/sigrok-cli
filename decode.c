@@ -22,7 +22,7 @@
 #include <glib.h>
 #include "sigrok-cli.h"
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 static GHashTable *pd_ann_visible = NULL;
 static GHashTable *pd_meta_visible = NULL;
 static GHashTable *pd_binary_visible = NULL;

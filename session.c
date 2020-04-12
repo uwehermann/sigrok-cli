@@ -26,7 +26,7 @@
 static uint64_t limit_samples = 0;
 static uint64_t limit_frames = 0;
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 extern struct srd_session *srd_sess;
 #endif
 
@@ -315,7 +315,7 @@ void datafeed_in(const struct sr_dev_inst *sdi,
 
 		rcvd_samples_logic = rcvd_samples_analog = 0;
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 		if (opt_pds) {
 			if (samplerate) {
 				if (srd_session_metadata_set(srd_sess, SRD_CONF_SAMPLERATE,
@@ -345,7 +345,7 @@ void datafeed_in(const struct sr_dev_inst *sdi,
 					props->samplerate = samplerate;
 					break;
 				}
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 				if (opt_pds) {
 					if (srd_session_metadata_set(srd_sess, SRD_CONF_SAMPLERATE,
 							g_variant_new_uint64(samplerate)) != SRD_OK) {
@@ -406,7 +406,7 @@ void datafeed_in(const struct sr_dev_inst *sdi,
 		input_len = (end_sample - rcvd_samples_logic) * logic->unitsize;
 
 		if (opt_pds) {
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 			if (srd_session_send(srd_sess, rcvd_samples_logic, end_sample,
 					logic->data, input_len, logic->unitsize) != SRD_OK)
 				sr_session_stop(session);

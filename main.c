@@ -22,7 +22,7 @@
 #include "sigrok-cli.h"
 
 struct sr_context *sr_ctx = NULL;
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 struct srd_session *srd_sess = NULL;
 #endif
 
@@ -67,7 +67,7 @@ int select_channels(struct sr_dev_inst *sdi)
 		}
 		g_slist_free(selected_channels);
 	}
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 	map_pd_channels(sdi);
 #endif
 	return SR_OK;
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
 	if (sr_init(&sr_ctx) != SR_OK)
 		goto done;
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 	/* Set the loglevel (amount of messages to output) for libsigrokdecode. */
 	if (srd_log_loglevel_set(opt_loglevel) != SRD_OK)
 		goto done;
@@ -279,7 +279,7 @@ int main(int argc, char **argv)
 		show_transform();
 	else if (opt_scan_devs)
 		show_dev_list();
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 	else if (opt_pds && opt_show)
 		show_pd_detail();
 #endif
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 	else
 		show_help();
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 	if (opt_pds)
 		srd_exit();
 #endif

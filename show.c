@@ -46,7 +46,7 @@ static gint sort_drivers(gconstpointer a, gconstpointer b)
 	return strcmp(sdda->name, sddb->name);
 }
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 static gint sort_pds(gconstpointer a, gconstpointer b)
 {
 	const struct srd_decoder *sda = a, *sdb = b;
@@ -66,9 +66,8 @@ void show_version(void)
 
 	printf("Libraries and features:\n");
 
-	printf("- libsigrok %s/%s (rt: %s/%s).\n",
-		SR_PACKAGE_VERSION_STRING, SR_LIB_VERSION_STRING,
-		sr_package_version_string_get(), sr_lib_version_string_get());
+	printf("- libsigrok %s (rt: %s).\n",
+		SR_PACKAGE_VERSION_STRING, sr_package_version_string_get());
 
 	s = g_string_sized_new(200);
 	g_string_append(s, " - Libs:\n");
@@ -93,10 +92,9 @@ void show_version(void)
 	printf("  - SCPI backends: %s.\n", str);
 	g_free(str);
 
-#ifdef HAVE_SRD
-	printf("- libsigrokdecode %s/%s (rt: %s/%s).\n",
-		SRD_PACKAGE_VERSION_STRING, SRD_LIB_VERSION_STRING,
-		srd_package_version_string_get(), srd_lib_version_string_get());
+#ifdef LIBSIGROKDECODE_FOUND
+	printf("- libsigrokdecode %s (rt: %s).\n",
+		SRD_PACKAGE_VERSION_STRING, srd_package_version_string_get());
 
 	s = g_string_sized_new(200);
 	g_string_append(s, " - Libs:\n");
@@ -128,7 +126,7 @@ void show_supported(void)
 	const GSList *l;
 	GSList *sl;
 	int i;
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 	struct srd_decoder *dec;
 #endif
 
@@ -183,7 +181,7 @@ void show_supported(void)
 	printf("\n");
 	g_slist_free(sl);
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 	if (srd_init(NULL) == SRD_OK) {
 		printf("Supported protocol decoders:\n");
 		srd_decoder_load_all();
@@ -205,7 +203,7 @@ void show_supported(void)
 
 void show_supported_wiki(void)
 {
-#ifndef HAVE_SRD
+#ifndef LIBSIGROKDECODE_FOUND
 	printf("Error, libsigrokdecode support not compiled in.");
 #else
 	const GSList *l;
@@ -837,7 +835,7 @@ void show_dev_detail(void)
 
 }
 
-#ifdef HAVE_SRD
+#ifdef LIBSIGROKDECODE_FOUND
 static void show_pd_detail_single(const char *pd)
 {
 	struct srd_decoder *dec;

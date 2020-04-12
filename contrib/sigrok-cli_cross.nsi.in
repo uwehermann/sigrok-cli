@@ -34,26 +34,26 @@
 # --- Global stuff ------------------------------------------------------------
 
 # Installer/product name.
-Name "@PACKAGE_NAME@"
+Name "@CMAKE_PROJECT_NAME@"
 
 # Filename of the installer executable.
-OutFile "@PACKAGE_NAME@-@SC_PACKAGE_VERSION@-installer.exe"
+OutFile "@CMAKE_PROJECT_NAME@-@PROJECT_VERSION@-installer.exe"
 
 # Where to install the application.
-InstallDir "$PROGRAMFILES\sigrok\@PACKAGE_NAME@"
+InstallDir "$PROGRAMFILES\sigrok\@CMAKE_PROJECT_NAME@"
 
 # Request admin privileges for Windows Vista and Windows 7.
 # http://nsis.sourceforge.net/Docs/Chapter4.html
 RequestExecutionLevel admin
 
 # Local helper definitions.
-!define REGSTR "Software\Microsoft\Windows\CurrentVersion\Uninstall\@PACKAGE_NAME@"
+!define REGSTR "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CMAKE_PROJECT_NAME@"
 
 
 # --- MUI interface configuration ---------------------------------------------
 
 # Use the following icon for the installer EXE file.
-!define MUI_ICON "@top_srcdir@/contrib/sigrok-logo-notext.ico"
+!define MUI_ICON "@CMAKE_SOURCE_DIR@/contrib/sigrok-logo-notext.ico"
 
 # Show a nice image at the top of each installer page.
 !define MUI_HEADERIMAGE
@@ -71,7 +71,7 @@ RequestExecutionLevel admin
 
 # Path where the cross-compiled sigrok tools and libraries are located.
 # Change this to where-ever you installed libsigrok.a and so on.
-!define CROSS "@prefix@"
+!define CROSS "@CMAKE_INSTALL_PREFIX@"
 
 
 # --- MUI pages ---------------------------------------------------------------
@@ -80,7 +80,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_WELCOME
 
 # Show the license of the project.
-!insertmacro MUI_PAGE_LICENSE "@top_srcdir@/COPYING"
+!insertmacro MUI_PAGE_LICENSE "@CMAKE_SOURCE_DIR@/COPYING"
 
 # Show a screen which allows the user to select which components to install.
 !insertmacro MUI_PAGE_COMPONENTS
@@ -109,7 +109,7 @@ RequestExecutionLevel admin
 
 # --- Default section ---------------------------------------------------------
 
-Section "@PACKAGE_NAME@ (required)" Section1
+Section "@CMAKE_PROJECT_NAME@ (required)" Section1
 	# This section is gray (can't be disabled) in the component list.
 	SectionIn RO
 
@@ -117,10 +117,10 @@ Section "@PACKAGE_NAME@ (required)" Section1
 	SetOutPath "$INSTDIR"
 
 	# License file.
-	File "@top_srcdir@/COPYING"
+	File "@CMAKE_SOURCE_DIR@/COPYING"
 
 	# sigrok-cli.exe.
-	File "${CROSS}/bin/@PACKAGE_NAME@.exe"
+	File "${CROSS}/bin/@CMAKE_PROJECT_NAME@.exe"
 
 	# Zadig (used for installing WinUSB drivers).
 	File "${CROSS}/zadig.exe"
@@ -144,35 +144,35 @@ Section "@PACKAGE_NAME@ (required)" Section1
 
 	# Create a sub-directory in the start menu.
 	CreateDirectory "$SMPROGRAMS\sigrok"
-	CreateDirectory "$SMPROGRAMS\sigrok\@PACKAGE_NAME@"
+	CreateDirectory "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@"
 
 	# Create a shortcut for sigrok-cli (this merely opens a "DOS box").
 	# Set the working directory (where the user will be placed into when
 	# the DOS box starts) to the installation directory.
 	SetOutPath "$INSTDIR"
-	CreateShortCut "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\sigrok command-line tool.lnk" \
+	CreateShortCut "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\sigrok command-line tool.lnk" \
 		"$SYSDIR\cmd.exe" \
-		"/K echo For instructions run @PACKAGE_NAME@ --help." \
+		"/K echo For instructions run @CMAKE_PROJECT_NAME@ --help." \
 		"$SYSDIR\cmd.exe" 0 \
-		SW_SHOWNORMAL "" "Run @PACKAGE_NAME@"
+		SW_SHOWNORMAL "" "Run @CMAKE_PROJECT_NAME@"
 
 	# Create a shortcut for the uninstaller.
-	CreateShortCut "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Uninstall @PACKAGE_NAME@.lnk" \
+	CreateShortCut "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Uninstall @CMAKE_PROJECT_NAME@.lnk" \
 		"$INSTDIR\Uninstall.exe" "" "$INSTDIR\Uninstall.exe" 0 \
-		SW_SHOWNORMAL "" "Uninstall @PACKAGE_NAME@"
+		SW_SHOWNORMAL "" "Uninstall @CMAKE_PROJECT_NAME@"
 
 	# Create a shortcut for the Zadig executable.
-	CreateShortCut "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Zadig (@PACKAGE_NAME@).lnk" \
+	CreateShortCut "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Zadig (@CMAKE_PROJECT_NAME@).lnk" \
 		"$INSTDIR\zadig.exe" "" "$INSTDIR\zadig.exe" 0 \
 		SW_SHOWNORMAL "" "Zadig"
 
 	# Create a shortcut for the Zadig executable (for Win XP).
-	CreateShortCut "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Zadig (@PACKAGE_NAME@, Win XP).lnk" \
+	CreateShortCut "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Zadig (@CMAKE_PROJECT_NAME@, Win XP).lnk" \
 		"$INSTDIR\zadig_xp.exe" "" "$INSTDIR\zadig_xp.exe" 0 \
 		SW_SHOWNORMAL "" "Zadig (Win XP)"
 
 	# Create registry keys for "Add/remove programs" in the control panel.
-	WriteRegStr HKLM "${REGSTR}" "DisplayName" "@PACKAGE_STRING@"
+	WriteRegStr HKLM "${REGSTR}" "DisplayName" "@CMAKE_PROJECT_NAME@"
 	WriteRegStr HKLM "${REGSTR}" "UninstallString" \
 		"$\"$INSTDIR\Uninstall.exe$\""
 	WriteRegStr HKLM "${REGSTR}" "InstallLocation" "$\"$INSTDIR$\""
@@ -184,7 +184,7 @@ Section "@PACKAGE_NAME@ (required)" Section1
 	WriteRegStr HKLM "${REGSTR}" "URLUpdateInfo" \
 		"http://sigrok.org/wiki/Downloads"
 	WriteRegStr HKLM "${REGSTR}" "URLInfoAbout" "http://sigrok.org"
-	WriteRegStr HKLM "${REGSTR}" "DisplayVersion" "@SC_PACKAGE_VERSION@"
+	WriteRegStr HKLM "${REGSTR}" "DisplayVersion" "@PROJECT_VERSION@"
 	WriteRegStr HKLM "${REGSTR}" "Contact" \
 		"sigrok-devel@lists.sourceforge.org"
 	WriteRegStr HKLM "${REGSTR}" "Comments" \
@@ -218,7 +218,7 @@ Section /o "Example data" Section2
 	File "${CROSS}/share/sigrok-dumps/z80/kc85/kc85-20mhz.sr"
 
 	# Create a shortcut for the example data folder.
-	CreateShortCut "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Examples (@PACKAGE_NAME@).lnk" \
+	CreateShortCut "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Examples (@CMAKE_PROJECT_NAME@).lnk" \
 		"$INSTDIR\examples" "" "$INSTDIR\examples" 0 \
 		SW_SHOWNORMAL "" ""
 SectionEnd
@@ -232,7 +232,7 @@ Section "Uninstall"
 
 	# Delete the application, the application data, and related libs.
 	Delete "$INSTDIR\COPYING"
-	Delete "$INSTDIR\@PACKAGE_NAME@.exe"
+	Delete "$INSTDIR\@CMAKE_PROJECT_NAME@.exe"
 	Delete "$INSTDIR\zadig.exe"
 	Delete "$INSTDIR\zadig_xp.exe"
 	Delete "$INSTDIR\python34.dll"
@@ -255,14 +255,14 @@ Section "Uninstall"
 	RMDir "$INSTDIR"
 
 	# Delete the links from the start menu.
-	Delete "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\sigrok command-line tool.lnk"
-	Delete "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Uninstall @PACKAGE_NAME@.lnk"
-	Delete "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Zadig (@PACKAGE_NAME@).lnk"
-	Delete "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Zadig (@PACKAGE_NAME@, Win XP).lnk"
-	Delete "$SMPROGRAMS\sigrok\@PACKAGE_NAME@\Examples (@PACKAGE_NAME@).lnk"
+	Delete "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\sigrok command-line tool.lnk"
+	Delete "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Uninstall @CMAKE_PROJECT_NAME@.lnk"
+	Delete "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Zadig (@CMAKE_PROJECT_NAME@).lnk"
+	Delete "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Zadig (@CMAKE_PROJECT_NAME@, Win XP).lnk"
+	Delete "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@\Examples (@CMAKE_PROJECT_NAME@).lnk"
 
 	# Delete the sub-directory in the start menu.
-	RMDir "$SMPROGRAMS\sigrok\@PACKAGE_NAME@"
+	RMDir "$SMPROGRAMS\sigrok\@CMAKE_PROJECT_NAME@"
 	RMDir "$SMPROGRAMS\sigrok"
 
 	# Delete the registry key(s).
